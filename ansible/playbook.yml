@@ -1,0 +1,11 @@
+---
+  - name: Run simple hello world
+    hosts: "localhost"
+    become: true
+    tasks:
+      - name: Log app
+        shell: 'echo hello world!!'
+        register: app_output
+
+      - debug:
+          var: app_output.stdout_lines
