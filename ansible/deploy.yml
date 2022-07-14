@@ -14,6 +14,13 @@
         debug:
           var: files_matched
 
+      - name: Log app
+        shell: 'pwd'
+        register: app_output
+
+      - debug:
+          var: app_output.stdout_lines
+
       - name: Debug files_matched loop
         shell: 'echo hi > {{item.path}}'  
         loop: "{{ files_matched.files|flatten(levels=1) }}"
