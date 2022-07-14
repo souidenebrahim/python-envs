@@ -30,7 +30,7 @@ jobs:
         run: pwd
 
       - name: Fetch files exists
-        run: pwd
+        run: ls -l
         
       # Runs a single command using the runners shell
       - name: Run playbook
