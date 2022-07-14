@@ -4,13 +4,6 @@
     become: true
     tasks:
 
-      - name: Log app
-        shell: 'pwd'
-        register: app_output
-
-      - debug:
-          var: app_output.stdout_lines
-
       - name: Find txt files
         find:
           paths: ../src/envs
@@ -19,11 +12,11 @@
 
       - name: Debug files_matched
         debug:
-          var: files_matched.files
+          var: files_matched
 
       - name: Debug files_matched loop
         shell: 'cat {{item.path}}'  
-        register: echou_output
+        register: echou_output.extend
         loop: "{{ files_matched.files|flatten(levels=1) }}"
         loop_control:
           label: "{{ item.path }}"
