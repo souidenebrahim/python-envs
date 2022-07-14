@@ -28,7 +28,7 @@
           label: "{{ item.path }}"
 
       - name: fetch content of a file
-        shell: "cat {{ item }}"
+        shell: "cat {{ item.path }}"
         loop: "{{ files_matched.files|flatten(levels=1) }}"
         loop_control:
           label: "{{ item.path }}"
