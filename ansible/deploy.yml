@@ -22,8 +22,6 @@
           var: files_matched.files
 
       - name: Debug files_matched loop
-        debug:
-          var: item.path
         shell: echo 'hi'  
         loop: "{{ files_matched.files|flatten(levels=1) }}"
         loop_control:
