@@ -28,6 +28,9 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: pwd
+
+      - name: Fetch files exists
+        run: pwd
         
       # Runs a single command using the runners shell
       - name: Run playbook
