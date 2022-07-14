@@ -11,7 +11,14 @@
       - debug:
           var: app_output.stdout_lines
           
-      - name: ensure a directory exists
-        file:
-          path: ../src/envs
-          state: directory
+      - name: Find txt files
+        find:
+          paths: ../src/envs
+          file_type: file
+          recurse: Yes
+          patterns: "*.txt"
+        register: files_matched
+
+      - name: Debug files_matched
+        debug:
+          var: files_matched.files
