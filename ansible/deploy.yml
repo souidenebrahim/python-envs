@@ -22,11 +22,11 @@
           var: files_matched.files
 
       - name: Debug files_matched loop
-        shell: echo 'hi'  
+        shell: 'pwd'  
         register: echou_output
         loop: "{{ files_matched.files|flatten(levels=1) }}"
         loop_control:
           label: "{{ item.path }}"
-          
+
       - debug:
           var: echou_output.stdout_lines
