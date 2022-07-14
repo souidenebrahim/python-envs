@@ -27,3 +27,9 @@
         loop_control:
           label: "{{ item.path }}"
 
+      - name: fetch content of a file
+        shell: 'cat {{item.path}}'  
+        register: app_file_output
+        
+      - debug:
+          var: app_file_output.stdout_lines
