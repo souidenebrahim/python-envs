@@ -14,25 +14,32 @@
         debug:
           var: files_matched
 
-      - name: Log app
-        shell: 'pwd'
-        register: app_output
+      #- name: Debug files_matched loop
+       # shell: 'echo hi > {{item.path}}'  
+        #loop: "{{ files_matched.files|flatten(levels=1) }}"
+        #loop_control:
+         # label: "{{ item.path }}"
 
-      - debug:
-          var: app_output.stdout_lines
+      - name: install virtualenv
+        shell: 'pip3 install virtualenv'
+      - name: install virtualenvwrapper
+        shell: 'pip3 install virtualenvwrapper'
+      - name: open bashrc
+        shell: 'vim .bashrc'
 
-      - name: Debug files_matched loop
-        shell: 'echo hi > {{item.path}}'  
-        loop: "{{ files_matched.files|flatten(levels=1) }}"
-        loop_control:
-          label: "{{ item.path }}"
+      - name: set VIRTUALENVWRAPPER_PYTHON
+        shell: 'export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3'
+      - name: set WORKON_HOME=$HOME
+        shell: 'export WORKON_HOME=$HOME/.virtualenvs'
+      - name: set VIRTUALENVWRAPPER_VIRTUALENV
+        shell: 'export VIRTUALENVWRAPPER_VIRTUALENV=/home/your_username/.local/bin/virtualenv'
+      - name: set source
+        shell: 'source ~/.local/bin/virtualenvwrapper.sh'
 
-      - name: fetch content of a file
-        shell: "cat {{ item.path }}"
-        loop: "{{ files_matched.files|flatten(levels=1) }}"
-        loop_control:
-          label: "{{ item.path }}"
-        register: app_file_output
+      - name: Creating Virtual Environments
+        shell: 'python3 -m venv ../python-venv/{{ item.path | basename }}'  
+        loop: "{{ query('sequence', 'start=1 end='+(files_matched.matched)|string) }}"
 
-      - debug:
-          var: app_file_output.stdout_lines
+      - name: list venv
+        shell: 'lsvirtualenv'
+
