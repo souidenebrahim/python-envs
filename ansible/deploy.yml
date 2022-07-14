@@ -28,11 +28,8 @@
           label: "{{ item.path }}"
 
       - name: fetch content of a file
-        shell: 'cat {{item.path}}'  
+        shell: 'cat ../src/envs/file_one.txt'  
         register: app_file_output
-        loop: "{{ files_matched.files|flatten(levels=1) }}"
-        loop_control:
-          label: "{{ item.path }}"
-                  
+
       - debug:
           var: app_file_output.stdout_lines
