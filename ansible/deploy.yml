@@ -3,9 +3,15 @@
     hosts: "localhost"
     become: true
     tasks:
+
       - name: Log app
         shell: 'pwd'
         register: app_output
 
       - debug:
           var: app_output.stdout_lines
+          
+      - name: ensure a directory exists
+        file:
+          path: ../src/envs
+          state: directory
