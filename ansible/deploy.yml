@@ -14,8 +14,6 @@
       - name: Find txt files
         find:
           paths: ../src/envs
-          file_type: file
-          recurse: Yes
           patterns: "file_*.txt"
         register: files_matched
 
