@@ -19,12 +19,10 @@
       - name: Debug files_matched loop
         debug:
           var: item.path
-          - name: show simple task
-            shell: 'pwd'
-            register: app_output
-
-          - debug:
-              var: app_output.stdout_lines
+          shell: 'pwd'
+          register: app_output
+          debug:
+            var: app_output.stdout_lines
 
         loop: "{{ files_matched.files|flatten(levels=1) }}"
         loop_control:
