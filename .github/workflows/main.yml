@@ -31,4 +31,4 @@ jobs:
         
       # Runs a single command using the runners shell
       - name: Run playbook
-        run: ansible-playbook ./../../ansible/deploy.yml
+        run: ansible-playbook ./eploy.yaml
