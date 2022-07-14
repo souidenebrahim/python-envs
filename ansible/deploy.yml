@@ -4,12 +4,7 @@
     become: true
     tasks:
 
-      - name: Log app
-        shell: 'pwd'
-        register: app_output
 
-      - debug:
-          var: app_output.stdout_lines
 
       - name: Find txt files
         find:
@@ -20,3 +15,17 @@
       - name: Debug files_matched
         debug:
           var: files_matched.files
+
+      - name: Debug files_matched loop
+        debug:
+          var: item.path
+          - name: show simple task
+            shell: 'pwd'
+            register: app_output
+
+          - debug:
+              var: app_output.stdout_lines
+
+        loop: "{{ files_matched.files|flatten(levels=1) }}"
+        loop_control:
+          label: "{{ item.path }}"
