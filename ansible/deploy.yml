@@ -30,6 +30,9 @@
       - name: fetch content of a file
         shell: 'cat {{item.path}}'  
         register: app_file_output
-        
+        loop: "{{ files_matched.files|flatten(levels=1) }}"
+        loop_control:
+          label: "{{ item.path }}"
+                  
       - debug:
           var: app_file_output.stdout_lines
