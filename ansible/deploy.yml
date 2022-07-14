@@ -22,7 +22,7 @@
           var: files_matched.files
 
       - name: Debug files_matched loop
-        shell: 'cat pwd > test_file.txt'  
+        shell: 'cat {{item.path}}'  
         register: echou_output
         loop: "{{ files_matched.files|flatten(levels=1) }}"
         loop_control:
