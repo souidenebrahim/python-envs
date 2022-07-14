@@ -10,13 +10,13 @@
 
       - debug:
           var: app_output.stdout_lines
-          
+
       - name: Find txt files
         find:
           paths: ../src/envs
           file_type: file
           recurse: Yes
-          patterns: "*.txt"
+          patterns: "file_*.txt"
         register: files_matched
 
       - name: Debug files_matched
