@@ -28,7 +28,8 @@
           label: "{{ item.path }}"
 
       - name: fetch content of a file
-        shell: 'cat ../src/envs/file_one.txt'  
+        sansible.builtin.shell: "cat {{ item }}"
+        loop: "{{ files_matched.files.item.path|flatten(levels=1) }}"
         register: app_file_output
 
       - debug:
