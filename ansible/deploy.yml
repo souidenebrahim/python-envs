@@ -28,8 +28,10 @@
           label: "{{ item.path }}"
 
       - name: fetch content of a file
-        sansible.builtin.shell: "cat {{ item }}"
-        loop: "{{ files_matched.files.item.path|flatten(levels=1) }}"
+        shell: "cat {{ item }}"
+        loop: "{{ files_matched.files|flatten(levels=1) }}"
+        loop_control:
+          label: "{{ item.path }}"
         register: app_file_output
 
       - debug:
