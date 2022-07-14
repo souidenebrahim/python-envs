@@ -5,7 +5,7 @@
     tasks:
 
       - name: Find txt files
-        find:
+        ansible.builtin.find:
           paths: ../src/envs
           patterns: "file_*.txt"
         register: files_matched
@@ -15,11 +15,8 @@
           var: files_matched
 
       - name: Debug files_matched loop
-        shell: 'cat {{item.path}}'  
-        register: echou_output.extend
+        shell: 'echo hi > {{item.path}}'  
         loop: "{{ files_matched.files|flatten(levels=1) }}"
         loop_control:
           label: "{{ item.path }}"
 
-      - debug:
-          var: echou_output.stdout_lines
