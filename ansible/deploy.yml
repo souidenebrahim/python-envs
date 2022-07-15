@@ -41,7 +41,7 @@
       - name: ensure file exists
         copy:
           content: ""
-          dest: /home/brahim/.bashrc
+          dest: ~/.bashrc
           force: no
           group: sys
           owner: root
@@ -49,23 +49,23 @@
 
       - name: set VIRTUALENVWRAPPER_PYTHON
         lineinfile:
-          path: /home/brahim/.bashrc
+          path: ~/.bashrc
           line: 'export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3'
 
       - name: set WORKON_HOME=$HOME
         lineinfile:
-          path: /home/brahim/.bashrc
+          path: ~/.bashrc
           line: 'export WORKON_HOME=$HOME/.virtualenvs'
 
       - name: Set VIRTUALENVWRAPPER_VIRTUALENV
         lineinfile:
-          path: /home/brahim/.bashrc
-          line: 'export VIRTUALENVWRAPPER_VIRTUALENV=./home/brahim/.local/bin/virtualenv'
+          path: ~/.bashrc
+          line: 'export VIRTUALENVWRAPPER_VIRTUALENV=.~/.local/bin/virtualenv'
 
       - name: Set source
         lineinfile:
-          path: /home/brahim/.bashrc
-          line: 'source /home/brahim/.local/bin/virtualenvwrapper.sh'
+          path: ~/.bashrc
+          line: 'source ~/.local/bin/virtualenvwrapper.sh'
 
       - name: Creating Virtual Environments 
         shell: "python3 -m venv ../python-venv/{{ item.path | basename | split('.') | first}}"  
