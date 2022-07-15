@@ -4,42 +4,82 @@
     become: true
     tasks:
 
+      # - name: Debug files_matched loop 
+      #   shell: 'basename -s .txt {{ item.path }}'
+      #   loop: "{{ files_matched.files }}"
+      #   loop_control:
+      #    label: "{{ item.path }}"
+      #   register: files_req
+
+      # - name: files_req aff
+      #   debug:
+      #     var: files_req
+
+      # - name: Apdate the apt
+      #   shell: 'sudo apt-get update'
+
+      # - name: "Check if path exists"
+      #   stat:
+      #     path: "/usr/local/bin/docker-compose"
+      #   register: pip_existance
+
+      # - name: Install pip
+      #   shell: 'sudo apt install python3-pip'
+      #   when: not pip_existance.stat.exists
+
+      # - name: install virtualenv
+      #   shell: 'pip install virtualenv'
+      # - name: install virtualenvwrapper
+      #   shell: 'pip install virtualenvwrapper'
+
       - name: Find txt files
         ansible.builtin.find:
           paths: ../src/envs
-          patterns: "file_*.txt"
+          patterns: "file-*.txt"
         register: files_matched
 
-      - name: Debug files_matched
-        debug:
-          var: files_matched
-
-      #- name: Debug files_matched loop
-       # shell: 'echo hi > {{item.path}}'  
-        #loop: "{{ files_matched.files|flatten(levels=1) }}"
-        #loop_control:
-         # label: "{{ item.path }}"
-
-      - name: install virtualenv
-        shell: 'pip3 install virtualenv'
-      - name: install virtualenvwrapper
-        shell: 'pip3 install virtualenvwrapper'
-      - name: open bashrc
-        shell: 'vim .bashrc'
+      - name: ensure file exists
+        copy:
+          content: ""
+          dest: /home/brahim/.bashrc
+          force: no
+          group: sys
+          owner: root
+          mode: 0555
 
       - name: set VIRTUALENVWRAPPER_PYTHON
-        shell: 'export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3'
+        lineinfile:
+          path: /home/brahim/.bashrc
+          line: 'export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3'
+
       - name: set WORKON_HOME=$HOME
-        shell: 'export WORKON_HOME=$HOME/.virtualenvs'
-      - name: set VIRTUALENVWRAPPER_VIRTUALENV
-        shell: 'export VIRTUALENVWRAPPER_VIRTUALENV=/home/your_username/.local/bin/virtualenv'
-      - name: set source
-        shell: 'source ~/.local/bin/virtualenvwrapper.sh'
+        lineinfile:
+          path: /home/brahim/.bashrc
+          line: 'export WORKON_HOME=$HOME/.virtualenvs'
 
-      - name: Creating Virtual Environments
-        shell: 'python3 -m venv ../python-venv/{{ item.path | basename }}'  
-        loop: "{{ query('sequence', 'start=1 end='+(files_matched.matched)|string) }}"
+      - name: Set VIRTUALENVWRAPPER_VIRTUALENV
+        lineinfile:
+          path: /home/brahim/.bashrc
+          line: 'export VIRTUALENVWRAPPER_VIRTUALENV=./home/brahim/.local/bin/virtualenv'
 
-      - name: list venv
-        shell: 'lsvirtualenv'
+      - name: Set source
+        lineinfile:
+          path: /home/brahim/.bashrc
+          line: 'source /home/brahim/.local/bin/virtualenvwrapper.sh'
 
+      - name: Creating Virtual Environments 
+        shell: "python3 -m venv ../python-venv/{{ item.path | basename | split('.') | first}}"  
+        with_items: "{{ files_matched.files }}"
+
+      - name: found directories
+        find:
+          paths: ../python-venv
+          recurse: no
+          file_type: directory
+        register: found_directories
+
+      - name: Activating Virtual Environments 
+        shell: source ../python-venv/{{ item.path | basename }}/bin/activate 
+        with_items: "{{ found_directories.files }}"
+        args:
+           executable: /bin/bash
